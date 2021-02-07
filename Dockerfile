@@ -59,14 +59,14 @@ RUN mkdir -p publish/blood
 ARG CACHEBUST
 
 # Clone NBloodServerSupervisor
-RUN git clone https://github.com/CommonLoon102/NBloodServerSupervisor.git
+RUN git clone https://github.com/DustyStyx/NBloodServerSupervisor.git
 
 # Build NBloodServerSupervisor
 RUN dotnet publish NBloodServerSupervisor/NBloodServerSupervisor.sln --configuration Release --output publish --self-contained false --runtime linux-x64 \
     && sed -i -e "s/CHANGEME/$(< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-32};echo;)/g" publish/appsettings.json
 
 # Clone NBlood
-RUN git clone https://github.com/CommonLoon102/NBlood.git
+RUN git clone https://github.com/DustyStyx/NBlood.git
 
 # Build NBlood
 RUN cd NBlood \
@@ -76,7 +76,7 @@ RUN cd NBlood \
 # Configure nginx
 RUN printf '\
 server { \n\
-    listen        23580; \n\
+    listen        80; \n\
     location / { \n\
         proxy_pass         http://localhost:5000; \n\
         proxy_http_version 1.1; \n\
